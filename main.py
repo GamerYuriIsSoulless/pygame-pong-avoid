@@ -75,18 +75,19 @@ def ballAnimation():
     if ball3.colliderect(player):
         gameRestart()
 
-    if ball.colliderect(player):
-            gameRestart()
-    if ball2.colliderect(player):
-            gameRestart()
-    if ball3.colliderect(player):
-            gameRestart()
-    if ball.colliderect(player2):
-            gameRestart()
-    if ball2.colliderect(player2):
-            gameRestart()
-    if ball3.colliderect(player2):
-            gameRestart()
+    if secondPlayer == True:
+        if ball.colliderect(player):
+                gameRestart()
+        if ball2.colliderect(player):
+                gameRestart()
+        if ball3.colliderect(player):
+                gameRestart()
+        if ball.colliderect(player2):
+                gameRestart()
+        if ball2.colliderect(player2):
+                gameRestart()
+        if ball3.colliderect(player2):
+                gameRestart()
 
 def gameRestart():
     global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore
