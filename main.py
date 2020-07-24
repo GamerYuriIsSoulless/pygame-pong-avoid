@@ -1,4 +1,4 @@
-import pygame, sys, random
+import pygame, sys, random, time
 pygame.font.init()
 
 # Variables
@@ -10,6 +10,7 @@ ballColor = (255, 0, 0)
 playerVel = 0
 playerTwoVel = 0
 playerScore = 0
+time = 0
 
 ballSpeedX = 5 * random.choice((1, -1))
 ballSpeedY = 5 * random.choice((1, -1))
@@ -90,7 +91,7 @@ def ballAnimation():
                 gameRestart()
 
 def gameRestart():
-    global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore
+    global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore, time
     ball.center = (screenWidth / 2, screenHeight / 2)
     ballSpeedY *= random.choice((1, -1))
     ballSpeedX *= random.choice((1, -1))
@@ -101,6 +102,7 @@ def gameRestart():
     ballSpeedY3 *= random.choice((1, -1))
     ballSpeedX3 *= random.choice((1, -1))
     playerScore = 0
+    time = 0
     
 # Main Setup
 pygame.init()
@@ -122,6 +124,8 @@ secondPlayer = False
 run = True
 mainFont = pygame.font.SysFont("Arial", 40)
 while run:
+
+    print(time)
 
     # Function Calling
     playerAnimation()
@@ -153,8 +157,12 @@ while run:
                 playerTwoVel += 3.5
             
 
+    if secondPlayer == True:
+        time += 1
+
     # Visuals
     playerScoreLabel = mainFont.render(f"{playerScore}", 1, (255,255,255))
+    timeLabel = mainFont.render(f"{time}", 1, (255,255,255))
     
     window.fill((0,0,0))
     pygame.draw.rect(window, white, player)
@@ -163,10 +171,11 @@ while run:
     pygame.draw.rect(window, ballColor, ball3)
 
     if secondPlayer == False:
-        window.blit(playerScoreLabel, (480, 20))
+        window.blit(playerScoreLabel, (20, 20))
 
     if secondPlayer == True:
         pygame.draw.rect(window, white, player2)
+        window.blit(timeLabel, (20, 20))
     
     pygame.display.update()
 
