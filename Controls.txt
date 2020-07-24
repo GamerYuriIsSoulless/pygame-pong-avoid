@@ -1,0 +1,5 @@
+Up arrow = player1 up
+down arrow = player1 down
+Tab = player2 activate
+w = player2 up
+s = player2 down
