@@ -1,11 +1,15 @@
-import pygame, sys, random, time
+import pygame, sys, random, os
 pygame.font.init()
+
+# Blits
+BALL = pygame.image.load(os.path.join("assets", "ball.png"))
+PADDLE = pygame.image.load(os.path.join("assets", "paddle.png"))
+BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "bg.png")), (640, 480))
 
 # Variables
 screenWidth = 640
 screenHeight = 480
 white = (255, 255, 255)
-ballColor = (255, 0, 0)
 
 playerVel = 0
 playerTwoVel = 0
@@ -35,8 +39,7 @@ def playerAnimation():
         player2.bottom = screenHeight
 
 def ballAnimation():
-    global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore, ballColor
-    ballColor = (255, 0, 0)
+    global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore
     ball.x += ballSpeedX
     ball.y += ballSpeedY
     
@@ -115,7 +118,7 @@ pygame.display.set_caption("Pong Avoid")
 # Rects
 player = pygame.Rect(screenWidth - 20, screenHeight / 2 - 35, 10, 70)
 player2 = pygame.Rect(screenWidth - 620, screenHeight / 2 - 35, 10, 70)
-ball = pygame.Rect(screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
+ball = pygame.Rect( screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
 ball2 = pygame.Rect(screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
 ball3 = pygame.Rect(screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
 
@@ -124,8 +127,6 @@ secondPlayer = False
 run = True
 mainFont = pygame.font.SysFont("Arial", 40)
 while run:
-
-    print(time)
 
     # Function Calling
     playerAnimation()
@@ -163,18 +164,19 @@ while run:
     # Visuals
     playerScoreLabel = mainFont.render(f"{playerScore}", 1, (255,255,255))
     timeLabel = mainFont.render(f"{time}", 1, (255,255,255))
-    
+
     window.fill((0,0,0))
-    pygame.draw.rect(window, white, player)
-    pygame.draw.rect(window, ballColor, ball)
-    pygame.draw.rect(window, ballColor, ball2)
-    pygame.draw.rect(window, ballColor, ball3)
+    window.blit(BG, (0,0))
+    window.blit(PADDLE, player)
+    window.blit(BALL, ball)
+    window.blit(BALL, ball2)
+    window.blit(BALL, ball3)
 
     if secondPlayer == False:
         window.blit(playerScoreLabel, (20, 20))
 
     if secondPlayer == True:
-        pygame.draw.rect(window, white, player2)
+        window.blit(PADDLE, player2)
         window.blit(timeLabel, (20, 20))
     
     pygame.display.update()
