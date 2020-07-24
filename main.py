@@ -5,9 +5,10 @@ pygame.font.init()
 screenWidth = 640
 screenHeight = 480
 white = (255, 255, 255)
-red = (255, 0, 0)
+ballColor = (255, 0, 0)
 
 playerVel = 0
+playerTwoVel = 0
 playerScore = 0
 
 ballSpeedX = 5 * random.choice((1, -1))
@@ -26,8 +27,15 @@ def playerAnimation():
     if player.bottom >= screenHeight:
         player.bottom = screenHeight
 
+    player2.y += playerTwoVel
+    if player2.top <= 0:
+        player2.top = 0
+    if player2.bottom >= screenHeight:
+        player2.bottom = screenHeight
+
 def ballAnimation():
-    global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore
+    global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore, ballColor
+    ballColor = (255, 0, 0)
     ball.x += ballSpeedX
     ball.y += ballSpeedY
     
@@ -67,6 +75,19 @@ def ballAnimation():
     if ball3.colliderect(player):
         gameRestart()
 
+    if ball.colliderect(player):
+            gameRestart()
+    if ball2.colliderect(player):
+            gameRestart()
+    if ball3.colliderect(player):
+            gameRestart()
+    if ball.colliderect(player2):
+            gameRestart()
+    if ball2.colliderect(player2):
+            gameRestart()
+    if ball3.colliderect(player2):
+            gameRestart()
+
 def gameRestart():
     global ballSpeedX, ballSpeedY, ballSpeedX2, ballSpeedY2, ballSpeedX3, ballSpeedY3, playerScore
     ball.center = (screenWidth / 2, screenHeight / 2)
@@ -90,11 +111,13 @@ pygame.display.set_caption("Pong Avoid")
 
 # Rects
 player = pygame.Rect(screenWidth - 20, screenHeight / 2 - 35, 10, 70)
+player2 = pygame.Rect(screenWidth - 620, screenHeight / 2 - 35, 10, 70)
 ball = pygame.Rect(screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
 ball2 = pygame.Rect(screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
 ball3 = pygame.Rect(screenWidth / 2 - 7.5, screenHeight / 2 - 7.5, 15, 15)
 
 # Main Loop
+secondPlayer = False
 run = True
 mainFont = pygame.font.SysFont("Arial", 40)
 while run:
@@ -102,7 +125,7 @@ while run:
     # Function Calling
     playerAnimation()
     ballAnimation()
-
+    
     # Event Handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -112,11 +135,21 @@ while run:
                 playerVel += 3.5
             if event.key == pygame.K_UP:
                 playerVel -= 3.5
+            if event.key == pygame.K_TAB:
+                secondPlayer = True
+            if event.key == pygame.K_s and secondPlayer == True:
+                playerTwoVel += 3.5
+            if event.key == pygame.K_w and secondPlayer == True:
+                playerTwoVel -= 3.5
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 playerVel -= 3.5
             if event.key == pygame.K_UP:
                 playerVel += 3.5
+            if event.key == pygame.K_s and secondPlayer == True:
+                playerTwoVel -= 3.5
+            if event.key == pygame.K_w and secondPlayer == True:
+                playerTwoVel += 3.5
             
 
     # Visuals
@@ -124,10 +157,16 @@ while run:
     
     window.fill((0,0,0))
     pygame.draw.rect(window, white, player)
-    pygame.draw.rect(window, red, ball)
-    pygame.draw.rect(window, red, ball2)
-    pygame.draw.rect(window, red, ball3)
-    window.blit(playerScoreLabel, (480, 20))
+    pygame.draw.rect(window, ballColor, ball)
+    pygame.draw.rect(window, ballColor, ball2)
+    pygame.draw.rect(window, ballColor, ball3)
+
+    if secondPlayer == False:
+        window.blit(playerScoreLabel, (480, 20))
+
+    if secondPlayer == True:
+        pygame.draw.rect(window, white, player2)
+    
     pygame.display.update()
 
     # Display Handling
